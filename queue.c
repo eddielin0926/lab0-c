@@ -28,7 +28,7 @@ void q_free(struct list_head *l)
         return;
     struct list_head *node, *safe;
     list_for_each_safe (node, safe, l) {
-        element_t *el = container_of(node, element_t, list);
+        element_t *el = list_entry(node, element_t, list);
         free(el->value);
         list_del(node);
         free(el);
@@ -75,7 +75,7 @@ element_t *q_remove_head(struct list_head *head, char *sp, size_t bufsize)
 {
     if (!head || list_empty(head))
         return NULL;
-    element_t *el = container_of(head->next, element_t, list);
+    element_t *el = list_entry(head->next, element_t, list);
     if (sp)
         strncpy(sp, el->value, bufsize);
     list_del(&el->list);
@@ -87,7 +87,7 @@ element_t *q_remove_tail(struct list_head *head, char *sp, size_t bufsize)
 {
     if (!head || list_empty(head))
         return NULL;
-    element_t *el = container_of(head->prev, element_t, list);
+    element_t *el = list_entry(head->prev, element_t, list);
     if (sp)
         strncpy(sp, el->value, bufsize);
     list_del(&el->list);
