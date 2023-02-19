@@ -112,7 +112,7 @@ bool q_delete_mid(struct list_head *head)
     // https://leetcode.com/problems/delete-the-middle-node-of-a-linked-list/
     if (!head || list_empty(head))
         return false;
-    struct list_head *fwd = head, *bwd = head->prev;
+    struct list_head *fwd = head->next, *bwd = head->prev;
     while (fwd != bwd && fwd->next != bwd) {
         fwd = fwd->next;
         bwd = bwd->prev;
@@ -128,6 +128,18 @@ bool q_delete_mid(struct list_head *head)
 bool q_delete_dup(struct list_head *head)
 {
     // https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/
+    if (!head)
+        return false;
+    element_t *node, *safe;
+    list_for_each_entry_safe (node, safe, head, list) {
+        if (&safe->list != head) {
+            if (strcmp(node->value, safe->value) == 0) {
+                list_del(&node->list);
+                free(node->value);
+                free(node);
+            }
+        }
+    }
     return true;
 }
 
